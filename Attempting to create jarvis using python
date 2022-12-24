@@ -1,0 +1,56 @@
+# Import the necessary libraries
+import pyttsx3 
+# Text-to-speech library
+import speech_recognition as sr 
+# Speech recognition library
+
+# Define the "JARVIS" class
+class JARVIS:
+  def __init__(self):
+    # Initialize the text-to-speech engine
+    self.engine = pyttsx3.init()
+  
+  # Define a method for speaking
+  def speak(self, text):
+    self.engine.say(text)
+    self.engine.runAndWait()
+  
+  # Define a method for listening and recognizing speech
+  def listen(self):
+    # Create a speech recognition object
+    r = sr.Recognizer()
+    
+    # Start listening for speech
+    with sr.Microphone() as source:
+      print("Listening...")
+      audio = r.listen(source)
+      
+    # Attempt to recognize the speech
+    try:
+      text = r.recognize_google(audio)
+      print(f"You said: {text}")
+      return text
+    except:
+      self.speak("Sorry, I didn't understand that.")
+      return ""
+
+# Create an instance of the JARVIS class
+jarvis = JARVIS()
+
+# Have JARVIS greet the user
+jarvis.speak("Hello, how can I help you today?")
+
+# Continuously listen for and recognize speech
+while True:
+  text = jarvis.listen()
+  
+  # If the user says "hello", have JARVIS greet them
+  if "hello" in text:
+    jarvis.speak("Hello! How are you doing?")
+  # If the user says "goodbye", have JARVIS say goodbye and exit the program
+  elif "goodbye" in text:
+    jarvis.speak("Goodbye! Have a great day.")
+    break
+  # If the user says anything else, have JARVIS repeat it back to them
+  else:
+    jarvis.speak(f"You said: {text}")
